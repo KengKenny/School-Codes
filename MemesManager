@@ -1,0 +1,88 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using Unity.VisualScripting;
+
+public class MemesManager : MonoBehaviour
+{
+    public List<Memes> MemeData = new List<Memes>();
+    public Transform buttonHolder;
+    public GameObject buttonPrefab;
+
+    [Header("Info")]
+    public TextMeshProUGUI Memename;
+    public TextMeshProUGUI Memewhat;
+    public TextMeshProUGUI Memedoings;
+    public TextMeshProUGUI Memeyear;
+    public TextMeshProUGUI Memepurpose;
+
+    [Header("Images")]
+    public Image MemeImage;
+    public Sprite[] MemeSprites;
+
+    void Start()
+    {
+        Memes memes01 = new Memes("Maxwell", "Cat", "Meow", 2022, Role.Chill, MemeSprites[0]);
+        Memes memes02 = new Memes("Cheem", "Dog", "Bonks", 2020, Role.Offend, MemeSprites[1]);
+        Memes memes03 = new Memes("Stonks", "???", "Business", 2017, Role.Gain, MemeSprites[2]);
+        Memes memes04 = new Memes("Mike", "Monster", "Disappoint", 2018, Role.Stare, MemeSprites[3]);
+        MemeData.Add(memes01);
+        MemeData.Add(memes02);
+        MemeData.Add(memes03);
+        MemeData.Add(memes04);
+
+        foreach (Memes a in MemeData)
+        {
+            CreateMemesButton(a);
+        }
+    }
+
+    public void CreateMemesButton(Memes meme)
+    {
+        GameObject newMeme = Instantiate(buttonPrefab, buttonHolder);
+
+        ScriptButton memeButton = newMeme.GetComponent<ScriptButton>();
+        Button button = memeButton.GetComponent<Button>();
+
+        memeButton.SetData(meme);
+
+        button.onClick.AddListener(() => OnMemeButtonClick(meme));
+    }
+
+    public void OnMemeButtonClick(Memes meme)
+    {
+        Memename.text = "Name: " + meme.name;
+        Memewhat.text = "What: " + meme.what;
+        Memedoings.text = "Doings: " + meme.doings;
+        Memeyear.text = "Year: " + meme.year.ToString();
+        Memepurpose.text = "Purpose: " + meme.purpose.ToString();
+
+        // Display the corresponding image
+        MemeImage.sprite = meme.image;
+        MemeImage.gameObject.SetActive(true); // Ensure the image is visible
+    }
+}
+
+[System.Serializable]
+public class Memes
+{
+    public string name;
+    public string what;
+    public string doings;
+    public int year;
+    public Role purpose;
+    public Sprite image; // New field for the meme image
+
+    public Memes(string name, string what, string doings, int year, Role purpose, Sprite image)
+    {
+        this.name = name;
+        this.what = what;
+        this.doings = doings;
+        this.year = year;
+        this.purpose = purpose;
+        this.image = image;
+    }
+}
+
+public enum Role { Chill, Offend, Gain, Stare };
