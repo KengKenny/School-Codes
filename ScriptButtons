@@ -1,0 +1,17 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using JetBrains.Annotations;
+
+public class ScriptButton : MonoBehaviour
+{
+    public MemesManager memesManager;
+    public new TextMeshProUGUI name;
+
+    public void SetData(Memes memes)
+    {
+        memesManager = FindAnyObjectByType<MemesManager>();
+        name.text = memes.name;
+    }
+}
